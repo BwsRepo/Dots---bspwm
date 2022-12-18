@@ -1,0 +1,125 @@
+;---------------------------vars--------------------------------------------
+(defvar eww "/usr/bin/eww -c $HOME/.config/eww/bar")
+
+
+;workspaces 
+(deflisten workspace "scripts/workspaces")
+
+;time
+(defpoll time_h :interval "1s" "date '+%H'")
+(defpoll time_m :interval "1s" "date '+%M'")
+
+;net staus 
+(defpoll netstat :interval "100s" "scripts/netstat")
+
+
+;Vol
+(defpoll current-volume :interval "1s" "amixer -D pulse sget Master | grep 'Left:' | awk -F'[][]' '{ print $2 }' | tr -d '%'")
+(defvar volum false)
+;Mic 
+(defpoll current-mic :interval "1s" "amixer -D pulse sget Capture | grep 'Left:' | awk -F'[][]' '{ print $2 }' | tr -d '%'")
+(defvar mic  false )
+
+;-----------------------------Widgets---------------------------------------
+(defwidget bar []
+    (centerbox :orientation "v"
+        (workspaces)
+        (middle)
+        (bottom)))
+
+(defwidget workspaces []
+    (box :orientation "v"
+          :class "ws-main-bx"
+        (box    :orientation "v"
+                :space-evenly "false"
+                :spacing 15 
+            (button :class "pannel-btn"
+                    :onclick "launchpanel" "")
+            (literal :content workspace))))
+
+
+(defwidget middle []
+    (label :text ""))
+
+(defwidget bottom []
+    (centerbox :orientation "v"
+               :halign "center"
+               :valign "end"
+        (sys_ctrl)
+        (time)
+        (power)))
+
+(defwidget sys_ctrl []
+    (centerbox :orientation "v"
+        (net)
+        (mic)
+        (volum)))
+
+(defwidget net []
+   (box :orientation "v" :class "net_label"
+    (label :text netstat )))
+
+
+
+;; Volume Widgets ;;
+(defwidget mic []
+	(eventbox :onhover "${eww} update mic=true" 		
+			  :onhoverlost "${eww} update mic=false"
+	(box      :orientation "v" 	  
+			  :space-evenly "false" 
+			  :spacing "2"
+	(revealer :transition "slideup" 
+			  :reveal mic         
+			  :duration "550ms"
+	(scale    :class "micbar" 	  
+			  :value current-mic 
+			  :orientation "v"      
+			  :flipped true 
+			  :max 101 
+			  :min 0 
+			  :onchange "amixer -D pulse sset Capture {}%" ))
+	(label   :class "mic-icon" :text ""))))
+
+(defwidget volum []
+	(eventbox :onhover "${eww} update volum=true" 		
+			  :onhoverlost "${eww} update volum=false"
+	(box      :orientation "v" 	  
+			  :space-evenly "false" 
+			  :spacing "2"
+	(revealer :transition "slideup" 
+			  :reveal volum         
+			  :duration "550ms"
+	(scale    :class "volbar" 	  
+			  :value current-volume 
+			  :orientation "v"      
+			  :flipped true 
+			  :max 101 
+			  :min 0 
+			  :onchange "amixer -D pulse sset Master {}%" ))
+	(label   :class "volume-icon" :text "墳"))))
+
+(defwidget time []
+    (box :orientation "v" :class "time-main-bx"
+        (label :text time_h )
+        (label :text time_m)))
+
+
+(defwidget power []
+    (box :orientation "v"
+         :space-evenly "false"        
+         (button :class "power_btn" :onclick "powermenu" "⏻")))
+
+;------------------------------Windows--------------------------------------
+(defwindow bar
+    :wm-ignore false
+    :monitor 0 
+    :stacking "fg"
+    :anchor "left"
+    :reserve (struts :distance "54px" :side "left")
+    :windowtype "dock"
+    :geometry (geometry     :x "8px"
+                            :y "8px"
+                            :height "1064"
+                            :width "50px")                    
+    (bar))
+

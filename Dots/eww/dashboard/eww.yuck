@@ -1,0 +1,356 @@
+(defpoll art_w :interval "10s" "~/.config/eww/scripts/getart")
+(deflisten games_l "~/.config/eww/dashboard/scripts/steamgames")
+(defpoll music_title :interval "1s" "playerctl metadata --format '{{ title }}'")
+(defpoll pos :interval "1s" "playerctl --player=spotify position")
+(defpoll volume_percent :interval "3s" "amixer sget Master | grep 'Left:' | awk -F'[][]' '{ print $2 }' | tr -d '%'")
+(defpoll time :interval "1s" "date '+%H:%M'")
+(defpoll time_day :interval "1s" "date '+%A'")
+(defpoll distro :interval "12h" "awk '/^ID=/' /etc/*-release | awk -F'=' '{ print tolower($2) }'")
+(defpoll de :interval "12h" "echo $XDG_CURRENT_DESKTOP")
+(defpoll wm :interval "12h" "wmctrl -m | grep \"Name:\" | awk '{print $2}'")
+(defpoll shell :interval "5m" "echo $SHELL | awk -F'/' '{print $NF}'")
+(defpoll uptime :interval "30s" "uptime -p | sed -e 's/up //;s/ hours,/h/;s/ minutes/m/'")
+(defpoll packages :interval "5m" "pacman -Q | wc -l")
+
+;--------------launcher--------
+
+(defwidget bg []
+    (box    :orientation "h"
+            :class "bg"
+            :style "background-image: url('/usr/share/backgrounds/ripping-blur.png')"))
+
+(defwidget time []
+	(box :orientation "v" :class "time_outer" :halign "center" :vexpand false
+		(label :text time :class "time")
+		(label :text time_day :class "time_day")))
+
+
+
+(defwidget user []
+    (box    :orientation "v"
+            :class "user_oute"
+        (box    :orientation "h"
+                :class "img_bx")
+        (box    :orientation "v"
+                :class "user_lbl_bx"
+            (label :text "User: ")
+            (label :text "Os: ")
+            ;(label :text "Uptime: ")
+        )))
+
+(defwidget userII []
+	(box	:orientation "v" :class "user_outer"
+		(box	:orientation "h"	:class "logo" )
+		(label	:text "Hello")))
+
+(defwidget spotify []
+	(box :orientation "h" :class "spotify_bg"
+		(button :onclick "notify-send 'open-spotify'" :class "spotify_btn"	"")))
+
+(defwidget vim []
+	(box :orientation "h" :class "vim_bg"
+		(button :onclick "notify-send 'open-spotify'" :class "vim_btn" "")))
+
+(defwidget firefox []
+	(box :orientation "h" :class "firefox_bg"
+		(button :onclick "notify-send 'open-spotify'" :class "firefox_btn" "")))
+
+(defwidget vol_slider []
+	(box	:class "vol_main"
+			:orientation "h"
+		(box	:orientation "v"
+				:class "lab_box"
+			(label :text "墳"	:class "vol")
+			(label :text ""	:class "mic"))
+	(box	:orientation "v"
+			:class "vol_sliderbx"	
+		(scale	:value volume_percent
+				:orientation "h"
+				:tooltip "${volume_percent}%"
+				:max 101
+				:min 0
+				:onchange "amixer sset Master {}%" )
+		(scale  :value volume_percent
+				:orientation "h"
+				:tooltip "${volume_percent}%"
+				:max 101
+				:min 0
+				:onchange "amixer sset Master {}%" ))))
+
+(defwidget music_player []
+	(box	:class "musp_main"
+			:orientation "h"
+			:space-evenly false
+		(box	:class "musp_art"
+				:orientation "h"
+				:style "background-image: url('${art_w}');")
+		(box :orientation "h" :hexpand true
+		(box :orientation "v" :class "musp_btns"
+			(box	:class "musp_label"
+				:orientation "h"
+				:hexpand true
+				:halign "center"
+				(label 	:class "musp_title"
+						:text music_title
+						:limit-width 25))
+		(box	:class "musp_btn"
+				:orientation "h"
+				(button :onclick "playerctl previous" "玲")
+				(button :onclick "playerctl play-pause" "")
+				(button :onclick "playerctl next" "怜"))
+		(box	:class "slider_bx"
+				:orientation "h"
+			(scale  :class "mus_bar"
+					:min 0
+					:max 100
+					:value pos
+					:orientation "h"
+					:onchange "~/.config/eww/scripts/seek --seek {}"))))))
+
+(defwidget scroll_test []
+	(box	:orientation "h" :class "scroll_outer"
+		(scroll :hscroll 0
+				:vscroll 1000
+				(literal :content games_l))))
+
+(defwidget get_inf []
+    (box :orientation "v"   :class "fetch"
+      (label :text ": ${distro}")
+      (label :text ": ${wm}")
+      (label :text ": ${shell}")
+      (label :text ": ${uptime}")
+      (label :text "${packages}")))
+
+
+(defwidget websearch []
+	(box :orientation "h" :class "websearchbox_outer"
+		(label :class "search-icon" :text "")
+		(input :class "s-bar" :onaccept "~/.config/eww/dashboard/scripts/websearch {}")
+	))
+
+(defwidget searchapps []
+    (box :orientation "v" :space-evenly false :class "search-win" :halign "top" :valign "top"
+      (box :orientation "h" :space-evenly false :class "searchapps-bar" :halign "top" :valign "top"
+        (label :class "search-label" :text "")
+        (input :class "search-bar" :onchange "~/.config/eww/dashboard/scripts/websearch {}"))))
+
+(defwidget sys_graph []
+	(box :orientation "h" :class "sys_info_outer" 
+			(sys_g	:value {EWW_RAM.used_mem_perc} :class "ram" :icon "﬙")
+			(sys_g	:value {EWW_CPU.avg} :class "cpu" :icon "")
+			(sys_g	:value {(EWW_DISK["/"].free / EWW_DISK["/"].total) * 100} :class "disk" :icon "")))
+
+(defwidget sys_g [value class icon]
+(box	:orientation "h"
+		:class "graph"
+	(circular-progress	
+						:class class
+						:value value
+						:min 0
+						:max 101
+						:thickness 10
+			(label		:text icon :class "sys_g_icon"
+						:tooltip value 
+						""))))
+
+(defwidget web_launcher []
+	(box :orientation "v" :class "web_launcher_outer"
+		(eventbox :cursor "pointer" (button :class "reddit" :onclick "notify-send 'hello'" ""))
+		(eventbox :cursor "pointer" (button :class "youtube" :onclick "notify-send 'hello'" ""))
+		(eventbox :cursor "pointer" (button :class "github" :onclick "notify-send 'hello'" ""))
+		(eventbox :cursor "pointer" (button :class "duckgo" :onclick "notify-send 'hello'" ""))))
+;------------------------------------windows--------------------------------------------------
+
+(defwindow user_win
+	:monitor 0
+	:geometry (geometry :x "120px" 
+						:y "120px" 
+						:width "400px" 
+						:height "500px"
+						:anchor "top left")
+	:windowtype "dock"
+	:wm-ignore true
+	(userII))
+
+
+
+(defwindow discord_l
+	:wm-ignore true
+	:staking "fg"
+	:monitor 0
+    :windowtype "normal"
+	:geometry (geometry 
+				:x "1042px"
+                :y "632px"
+				:width 345
+				:height 158 
+				:anchor "top left")
+	(user))
+
+(defwindow spotify_l
+	:wm-ignore true
+	:staking "fg"
+	:monitor 0
+    :windowtype "normal"
+	:geometry (geometry 
+				:x "872px"
+                :y "802px"
+				:width 158
+				:height 158  
+				:anchor "top left")
+	(spotify))
+
+(defwindow vim_l
+	:wm-ignore true
+	:staking "fg"
+	:monitor 0
+    :windowtype "normal"
+	:geometry (geometry 
+				:x "532px"
+                :y "802px"
+				:width 158
+				:height 158 
+				:anchor "top left")
+	(vim))
+
+(defwindow firefox_l
+	:wm-ignore true
+	:staking "fg"
+	:monitor 0
+    :windowtype "normal"
+	:geometry (geometry 
+				:x "702px"
+                :y "802px"
+				:width  158
+				:height 158
+				:anchor "top left")
+	(firefox))
+
+
+
+(defwindow sys_inf
+	:wm-ignore true
+	:staking "fg"
+	:monitor 0
+    :windowtype "normal"
+	:geometry (geometry 
+				:x "1400px"
+                :y "460px"
+				:width 400
+				:height 500
+				:anchor "top left")
+	(user))
+
+(defwindow sound
+	:wm-ignore true
+	:staking "fg"
+	:monitor 0
+    :windowtype "normal"
+	:geometry (geometry 
+				:x "120px"
+                :y "632px"
+				:width 400
+				:height 158
+				:anchor "top left")
+	(vol_slider))
+
+(defwindow sys_stats
+	:wm-ignore true
+	:staking "fg"
+	:monitor 0
+    :windowtype "normal"
+	:geometry (geometry 
+				:x "120px"
+                :y "802px"
+				:width 400
+				:height 158
+				:anchor "top left")
+	(sys_graph))
+
+(defwindow music_player
+	:wm-ignore true
+	:monitor 0
+    :windowtype "normal"
+	:geometry (geometry 
+				:x "532px"
+                :y "632px"
+				:width 498
+				:height 158
+				:anchor "top left")
+	(music_player))
+
+(defwindow search
+	:wm-ignore true
+	:monitor 0
+    :windowtype "normal"
+	:geometry (geometry 
+				:x "1043px"
+                :y "802px"
+				:width 345
+				:height 158
+				:anchor "top left")
+	(user))
+
+(defwindow bg  
+    :wm-ignore true
+    :stacking "fg"
+    :monitor 0
+    :geometry (geometry :width 1920 :height 1080)
+    (bg))
+
+(defwindow user_winIII
+	:wm-ignore true
+	:staking "fg"
+	:monitor 0
+    :windowtype "normal"
+	:geometry (geometry 
+				:x "1400px"
+                :y "120px"
+				:width 400
+				:height 328
+				:anchor "top left")
+	(get_inf))
+
+(defwindow time_w
+	:wm-ignore true
+	:staking "fg"
+	:monitor 0
+    :windowtype "normal"
+	:geometry (geometry 
+				:x "532px"
+                :y "120px"
+				:width  328
+				:height 158
+				:anchor "top left")
+	(time))
+
+(defwindow sys_statIII
+	:wm-ignore true
+	:staking "fg"
+	:monitor 0
+    :windowtype "normal"
+	:geometry (geometry 
+				:x "872px"
+                :y "120px"
+				:width 516
+				:height 158
+				:anchor "top left")
+	(user))
+
+(defwindow steam
+	:geometry (geometry 
+		:x "532px"
+		:y "290px"
+		:width 697
+		:height 328
+		:anchor "top left")
+		(scroll_test))
+
+(defwindow web_launcher
+			:geometry (geometry 
+		:x "1242px"
+		:y "290px"
+		:width 146
+		:height 328
+		:anchor "top left")
+		(web_launcher))

@@ -1,0 +1,11 @@
+#!/usr/bin/bash
+
+ENET=$(cat /sys/class/net/e*/operstate)
+
+if [ $ENET == "up" ]; 
+then 
+    echo ""
+
+else 
+    echo ""
+fi

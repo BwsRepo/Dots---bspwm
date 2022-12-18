@@ -1,0 +1,49 @@
+
+
+#!/bin/bash
+
+## Files and cmd
+FILE="$HOME/.cache/eww_launchbar"
+CFG="$HOME/.config/eww/panel"
+EWW=`which eww`
+
+## Run eww daemon if not running already
+if [[ ! `pidof eww` ]]; then
+	${EWW} daemon
+	sleep 1
+fi
+
+## Open widgets 
+run_eww() {
+	${EWW} --config "$CFG" open-many \
+	background \
+	time_w  \
+	profile \
+	spotify_l \
+	firefox_l \
+	vim_l \
+	notion_l \
+	spotify \
+	sys_stats \
+	powermenu 
+}
+
+## Launch or close widgets accordingly
+if [[ ! -f "$FILE" ]]; then
+	touch "$FILE"
+	run_eww
+else
+	${EWW} --config "$CFG" close \
+	background \
+	time_w \
+	profile \
+	spotify_l \
+	firefox_l \
+	vim_l \
+	spotify \
+	sys_stats \
+	notion_l \
+	powermenu \
+
+	rm "$FILE"
+fi

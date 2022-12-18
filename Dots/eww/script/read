@@ -1,0 +1,8 @@
+#! /bin/bash
+
+while read -r p 
+do
+	VAR+="(label :text \"$p\")"
+done </tmp/metadata/gameslist
+
+echo "(box :orientation \"v\"$VAR)"

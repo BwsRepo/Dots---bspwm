@@ -1,0 +1,93 @@
+*{
+  all:unset;
+  font-family: "Iosevka Nerd Font:style=Regular";
+}
+
+
+//----------------colors-----------------------------
+
+$white: #A9B1D6;
+$black: #0f0f14;
+$grey: #1a1b26;
+$red: #f7768e;
+$orange: #ff9e64;
+$yellow: #e0af68;
+$green: #9ece6a;
+
+//----------------widgets----------------------------
+
+//top widgets 
+
+.pannel-btn{
+    color: $white;
+    font-size: 45px;
+}
+
+.workspaces {
+    color: $white;
+    margin-top: -20px;
+    font-size: 30px;
+}
+
+//bottom widgets 
+.time-main-bx{
+    font-weight: bold; 
+    font-size: 20px;
+}
+
+.net_label{
+    font-size: 40px;
+    margin-bottom: -10px;
+}
+
+.mic-icon{
+    color: $orange;
+    font-size: 40px;
+    margin-bottom: -10px;
+  }
+r trough highlight {
+    background-color: $yellow;
+    border-radius: 5px;
+  }
+  .micbar trough highlight {
+    background-color: $orange;
+    border-radius: 5px;
+}
+
+.volume-icon{
+    color: $green;
+    font-size: 40px;
+  }
+  scale trough {
+    all: unset;
+    background-color: $grey;
+    border-radius: 5px;
+    min-height: 80px;
+    min-width: 10px;
+    margin: .3rem 0 .3rem 0;
+  }
+  .bribar trough highlight {
+    background-color:$yellow;
+    border-radius: 5px;
+  }
+  .volbar trough highlight {
+    background-color: $green;
+    border-radius: 5px;
+  }
+
+.power_btn{
+    color: $white;
+    font-size: 40px;
+    margin-bottom: 5px;
+} 
+
+.power_btn:hover{
+    color: $red;
+}
+
+
+//------------------windows--------------------------
+.bar{
+    border-radius: 10px; 
+    background-color: $black;
+}

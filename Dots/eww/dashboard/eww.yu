@@ -1,0 +1,159 @@
+
+;----Vars----------------------------
+(defpoll time :interval "1s" "date '+%H:%M'")
+(defpoll music_art :interval "1s" "~/.config/eww/scripts/getart")
+(defpoll time :interval "1s" "date '+%H:%M'")
+(defpoll songname :interval "1s" "~/.config/eww/scripts/spotify --song")
+(defpoll artist :interval "1s" "~/.config/eww/scripts/spotify --artist")
+(defpoll icon :interval "1s" "~/.config/eww/scripts/spotify --icon")
+(defpoll songimage :interval "1s" "~/.config/eww/scripts/spotify --image")
+(defpoll repeat :interval "1s" "~/.config/eww/scripts/spotify --loop")
+(defpoll shuffle :interval "1s" "~/.config/eww/scripts/spotify --shuf")
+(defpoll pos :interval "1s" "~/.config/eww/scripts/spotify --pos")
+(defpoll len :interval "1s" "~/.config/eww/scripts/spotify --len")
+;----widgets-------------------------
+(defwidget power []
+    (box :class "power_main"
+         :orientation "h"
+         (box   :class "power_inner"
+                :orientation "h"
+            (button :class "logout_btn"
+                    :onclick "killall dwm" "﫼")
+            (button :class "suspend_btn"
+                    :onclick "systemctl suspend" "")
+            (button :class "reboot_btn"
+                    :onclick "systemctl reboot" "")
+            (button :class "poweroff_btn"
+                    :onclick "systemctl poweroff" ""))))
+
+(defwidget spotify_pl []
+    (box    :orientation "h"
+            :class "spotify_bg"
+    (box    :orientation "h"
+            :class "spotify_art"
+            :style "background-image: url('${music_art}');")
+    (box    :orientation "v"
+            :class "music_control"
+    (box    :orientation "v"
+            :class "music_labels"
+            (label :text "${songname}" :class "songname" :halign "start")
+            (label :text "${artist}" :class "artist" :halign "start"))
+    (box    :orientation "h"
+            :class "spotify_slide_bx"
+            (scale  :class "mus_bar"
+            :min 0
+            :max len
+            :value pos
+            :orientation "h"
+            :onchange "playerctl --player=spotify position {}"))
+    (box    :orientation "h"
+            :class "music_btn"
+            (button :onclick "playerctl previous" "玲")
+            (button :onclick "playerctl play-pause" "")
+            (button :onclick "playerctl next" "怜"  )))))
+
+(defwidget profile [] 
+    (box :orientation "v" :space-evenly "false" :class "profile" 
+        (box :orientation "h" :space-evenly "false" 
+            (box :class "pfp"))
+        (box :orientation "h" :space-evenly "false" :halign "center"
+            (label :class "pfp_txt"
+                    :text "user"))))
+
+(defwidget spotify []
+	(box :orientation "h" :class "spotify_btn_bg"
+		(button :onclick "notify-send 'open-spotify'" :class "spotify_btn"	"")))
+
+(defwidget vim []
+	(box :orientation "h" :class "vim_bg"
+		(button :onclick "notify-send 'open-spotify'" :class "vim_btn" "")))
+
+(defwidget browser []
+	(box :orientation "h" :class "firefox_bg"
+		(button :onclick "notify-send 'open-spotify'" :class "firefox_btn" "")))
+
+;----Windows-------------------------
+(defwindow background 
+    :wm-ignore true 
+    :stacking "fg"
+    :windowtype "normal"
+    :geometry (geometry :x "10" 
+                        :y "60px"
+                        :width "400px"
+                        :height "1010")
+"")
+
+(defwindow spotify_l
+	:wm-ignore true
+	:staking "fg"
+	:monitor 0
+    :windowtype "normal"
+	:geometry (geometry 
+				:x "305px"
+                :y "65px"
+				:width 100
+				:height 100  
+				:anchor "top left")
+(spotify))
+
+(defwindow firefox_l
+	:wm-ignore true
+	:staking "fg"
+	:monitor 0
+    :windowtype "normal"
+	:geometry (geometry 
+				:x "305px"
+                :y "170px"
+				:width 100
+				:height 100  
+				:anchor "top left")
+(browser))
+
+(defwindow vim_l
+	:wm-ignore true
+	:staking "fg"
+	:monitor 0
+    :windowtype "normal"
+	:geometry (geometry 
+				:x "305px"
+                :y "275px"
+				:width 100
+				:height 100  
+				:anchor "top left")
+(vim))
+
+(defwindow profile
+	:wm-ignore true
+	:staking "fg"
+	:monitor 0
+    :windowtype "normal"
+	:geometry (geometry 
+				:x "15px"
+                :y "170px"
+				:width 285
+				:height 310 
+				:anchor "top left")
+(profile))
+
+(defwindow musicp
+    :wm-ignore true 
+    :stacking "fg"
+    :monitor 0
+    :windowtype "normal"
+    :geometry (geometry
+                :x "15px"
+                :y "485px"
+                :width 390
+                :height 150)
+(spotify_pl))
+   
+(defwindow powermenu
+    :wm-ignore true
+    :stacking "fg"
+    :windowtype "normal"
+    :geometry (geometry :x "15"
+                        :y "965"
+                        :width "390px"
+                        :height "100px")
+(power))
+
