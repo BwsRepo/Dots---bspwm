@@ -1,0 +1,6 @@
+#!/bin/bash
+
+eww="eww -c $HOME/.config/eww/"
+
+$eww close music_pop || (\
+    $eww open music_pop)

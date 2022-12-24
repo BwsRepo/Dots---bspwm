@@ -1,0 +1,16 @@
+#!/usr/bin/bash 
+
+if [[ "$1" == "--spotify" ]]; then 
+    launchpanel && spotify &
+
+elif [[ "$1" == "--firefox" ]]; then 
+    launchpanel && firefox &
+
+elif [[ "$1" == "--vim" ]]; then 
+    launchpanel && st nvim &
+
+elif [[ "$1" == "--notion" ]]; then 
+    launchpanel && surf https://www.notion.com &
+
+fi
+

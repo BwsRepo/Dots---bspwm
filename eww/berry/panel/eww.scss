@@ -1,0 +1,145 @@
+*{
+    all: unset;
+    }
+
+
+.smolpanel{
+    background-color: #F5F5F4;
+    border-radius: 8px;
+    border-width: 2px;
+    border-style: solid;
+    border-color: #161616;
+}
+
+.sys_outer{
+    margin-left: 18px;
+    margin-right: 18px;
+    border-style: solid;
+    border-width: 2px;
+    border-color: #161616;
+    border-radius: 8px; 
+    background-color: #F5F5F4;
+}
+
+.ram_slider ,.cpu_slider, .sys_vol_slider{
+    //background-color: #56B6C2;
+    padding:10px;
+    margin-left: -100px;
+}
+
+.ram_icon, .cpu_icon, .vol_icon{
+    margin-top: 10px; 
+    margin-bottom: 10px;
+    margin-right: -50px;
+}
+
+.ram-box scale trough highlight, .cpu_box scale trough highlight, .vol_box scale trough highlight, .mic_box scale trough highlight {
+    all: unset;
+    border-radius: 50px;
+}
+
+.ram-box scale trough , .cpu_box scale trough , .vol_box scale trough {
+    all: unset;
+	background-color: #BEBEBE;
+	border-radius: 50px;
+    border-style: solid;
+    border-width: 3px;
+    border-color: #161616;
+	min-height: 20px;
+    min-width: 150px;
+}
+
+.ram-box scale trough highlight{
+    background-color: #E06C75;
+}
+
+.cpu_box scale trough highlight{
+    background-color: #56B6C2;
+}
+
+.vol_box scale trough highlight{
+    background-color: #98C470;
+}
+
+.side{
+    border-style: solid;
+    border-width: 2px;
+    border-color: #161616;
+    margin: 18px;
+    border-radius: 8px;
+    color: #161616
+}
+
+.pfp{
+    background-image: url("/home/redlotus/.config/eww/berry/images/lotus.png");
+    background-size: 150px;
+    background-repeat: no-repeat;
+    min-width: 150px;
+    min-height: 150px;
+    margin-top: 15px;
+}
+
+.Time{
+    font-size: 40px; 
+    color: #161616;
+}
+
+
+.music_outer{
+    //background-color: #F5F5F4;
+    border-style: solid;
+    border-width: 2px;
+    border-color: #161616;
+    margin: 18px;
+    border-radius: 8px;
+}
+
+.music_slider scale trough highlight{
+    all: unset;
+    border-radius: 10px;
+}
+
+
+.music_slider scale trough  {
+
+    all: unset;
+	background-color: #BEBEBE;
+	border-radius: 50px;
+    border-style: solid;
+    border-width: 2px;
+    border-color: #161616;
+	min-height: 20px;
+    min-width: 150px;
+    margin-left: 18px;
+    margin-right: 18px;
+}
+
+.music_slider scale trough highlight{
+    background-color: #161616;
+}
+
+.songname{
+    font-weight: bold;
+    font-family: Iosevka NF;
+    color: #161616;
+    font-size: 30px;
+    margin-top: 15px;
+    margin-bottom: -10px;
+}
+
+.artist{
+    font-weight: bold;
+    font-family: Iosevka NF;
+    color: #161616;
+    font-size: 20px; 
+    margin-top: 5px;   
+}
+
+.music_btn{
+    margin-top: 0px;
+    font-size: 30px;
+    margin-top: -20px;
+    color:#161616;
+ }
+
+

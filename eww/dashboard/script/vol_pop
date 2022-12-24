@@ -1,0 +1,6 @@
+#!/bin/bash
+
+eww="eww -c $HOME/.config/eww/"
+
+$eww close volmenu|| (\
+    $eww open volmenu)

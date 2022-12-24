@@ -1,0 +1,5 @@
+#!/bin/bash
+
+search="$*"
+firefox "https://duckduckgo.com/$search"
+

@@ -1,0 +1,8 @@
+#! /bin/bash
+
+position=`playerctl  position`
+echo $(printf %.$2f $(echo($positon)))
+
+
+
+

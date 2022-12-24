@@ -1,0 +1,102 @@
+
+*{all:unset;}
+
+
+$orange: #ff9e64;
+$red: #f7768e;
+$black: #0f0f14;
+$white: #A9B1D6;
+$grey: #c3c3c3;
+$lightblue: #b4f9f8;
+
+.whom{
+    background-color: $orange;    
+    color: $black;
+    font-size: 14px;
+    font-weight: bold;
+    margin: 4px 0px 2px 4px;
+    border-radius: 8px;
+    border-width: 1px;
+    border-color: #A9B1D6; 
+    padding: 5px;
+}
+
+.pfp{
+    background-image: url("images/profile.jpg");
+    background-size: 200px;
+    background-repeat: round;
+    min-width: 200px;
+    min-height: 200px;
+    border-radius: 500px;
+    margin-top: 25px;
+}
+
+.pfp_txt{
+    font-family: Iosevka NF;
+    padding: 0px;
+    margin-top: 20px;
+    font-weight: bold;
+    padding: 0px;
+    font-size: 30px;
+}
+
+
+
+
+.uptime-t{
+    background-color: $red;
+    color: $black;
+    font-size: 14px;
+    font-weight: bold;
+    margin: 6px 0px 2px 6px;
+    border-radius: 8px;
+    padding: 5px;
+}
+
+.msg{
+    font-size: 90px;
+    margin-top: 60px;
+    font-family: Comic Mono; 
+    color: $white;
+}
+
+.btn_bx{
+    font-family: Iosevka Nerd Font;
+    margin-top: 50px;
+    font-size: 50px;
+}
+
+.powe_btn, .rebo_btn, .lock_btn, .susp_btn, .exit_btn {
+    color: $grey;
+}
+
+.lock_btn:hover{
+    color:$white
+}
+
+.exit_btn:hover{
+    color: $red;
+}
+
+.susp_btn:hover{
+    color:$orange;
+}
+
+.rebo_btn:hover{
+    color:$lightblue;
+}
+
+.powe_btn:hover{
+    color:$red;
+}
+
+
+.powermen, .profile{
+    background-color: $black;
+    border-style: solid; 
+    border-width: 2px;
+    border-color: $white;
+    border-radius: 8px;
+}
+
+

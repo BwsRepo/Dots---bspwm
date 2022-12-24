@@ -1,0 +1,247 @@
+
+;----Vars----------------------------
+(defpoll CPU_USAGE :interval "1s" "scripts/getstats --cpu")
+(defpoll MEM_USAGE :interval "1s" "scripts/getstats --mem")
+(defpoll user :interval "1h" "whoami")
+(defpoll time :interval "1s" "date '+%H:%M'")
+(defpoll time_day :interval "1h" "date '+%A'")
+(defpoll music_art :interval "10s" "~/.config/eww/scripts/getart")
+(defpoll songname :interval "1s" "~/.config/eww/scripts/spotify --song")
+(defpoll artist :interval "1s" "~/.config/eww/scripts/spotify --artist")
+(defpoll icon :interval "1s" "~/.config/eww/scripts/spotify --icon")
+(defpoll songimage :interval "10s" "~/.config/eww/scripts/spotify --image")
+(defpoll pos :interval "1s" "~/.config/eww/scripts/spotify --pos")
+(defpoll len :interval "1s" "~/.config/eww/scripts/spotify --len")
+(defpoll uptime :interval "50s" "uptime -p | sed -e 's/up //;s/ hours,/h/;s/ hour,/h/;s/ minutes/m/;s/ minute/m/'")
+(defpoll volume_percent :interval "3s" "amixer sget Master | grep 'Left:' | awk -F'[][]' '{ print $2 }' | tr -d '%'")
+(defpoll mic_percent :interval "6s" "amixer -D pulse sget Capture | grep 'Left:' | awk -F'[][]' '{ print $2 }' | tr -d '%'")
+;----widgets-------------------------
+(defwidget time []
+	(box :orientation "v" :class "time_outer" :vexpand false :space-evenly false 
+            (label :text time_day :class "time_day" :halign "start")
+		(label :text time :class "time")))
+
+
+(defwidget power []
+    (box :class "power_main"
+         :orientation "h"
+         (box   :class "power_inner"
+                :orientation "h"
+            (button :class "logout_btn"
+                    :onclick "killall dwm" "﫼")
+            (button :class "suspend_btn"
+                    :onclick "systemctl suspend" "鈴")
+            (button :class "reboot_btn"
+                    :onclick "systemctl reboot" "")
+            (button :class "poweroff_btn"
+                    :onclick "systemctl poweroff" ""))))
+
+(defwidget spotify_pl []
+    (box    :orientation "h"
+            :class "spotify_bg"
+    (box    :orientation "h"
+            :class "spotify_art"
+            :style "background-image: url('${music_art}');")
+    (box    :orientation "v"
+            :class "music_control"
+    (box    :orientation "v"
+            :space-evenly false
+            :class "music_labels"
+            (label :text "${songname}" :class "songname" :halign "start" :limit-width 8)
+            (label :text "${artist}" :class "artist" :halign "start" :limit-width 15))
+    (box    :orientation "h"
+            :class "spotify_slide_bx"
+            (scale  
+                :class "music-slider"
+                :min 0
+                :max len
+                :value pos
+                :orientation "h"
+                :onchange "playerctl --player=spotify position {}"))
+    (box    :orientation "h"
+            :class "music_btn"
+            (button :onclick "playerctl previous" "玲")
+            (button :onclick "playerctl play-pause" "${icon}")
+            (button :onclick "playerctl next" "怜"  )))))
+
+(defwidget profile [] 
+    (box :orientation "v" :space-evenly "false" :class "profile" 
+        (box :orientation "h" :space-evenly "false"  :halign "center" :class "pfp")
+        (box :orientation "h" :space-evenly "false" :halign "center"
+            (label :class "pfp_txt" :text "${user}"))))
+
+(defwidget spotify []
+	(box :orientation "h" :class "spotify_btn_bg"
+		(button :onclick "~/.config/eww/scripts/startapp --spotify" :class "spotify_btn"	"")))
+
+(defwidget vim []
+	(box :orientation "h" :class "vim_bg"
+		(button :onclick "~/.config/eww/scripts/startapp --vim" :class "vim_btn" "")))
+
+(defwidget browser []
+	(box :orientation "h" :class "firefox_bg"
+		(button :onclick "~/.config/eww/scripts/startapp --firefox" :class "firefox_btn" "")))
+
+(defwidget notion []
+	(box :orientation "h" :class "notion_bg"
+		(button :onclick "~/.config/eww/scripts/startapp --notion" :class "notion_btn" "")))
+
+
+(defwidget stats []
+    (box :orientation "v" :class "sys_outer" :space-evenly false
+        (label :text "up since ${uptime}" :class "uptxt" :halign "start")
+    (box :orientation "v" :class "sys_inner"
+    
+    (box :orientation "h" :class "ram-box" 
+    (label :text "" :class "ram_icon" :halign "start")
+    (scale  :orientation "h":class "ram_slider" :active false  
+                :value MEM_USAGE
+                :max 100
+                :min 0))
+        
+        (box :orientation "h" :class "cpu_box"
+        (label :text "" :class "cpu_icon" :halign "start")  
+        (scale  :orientation "h" :class "cpu_slider" :active false 
+                :value CPU_USAGE
+                :max 100
+                :min 0))  
+        
+        (box :orientation "h" :class "vol_box"
+        (label :text "墳" :class "vol_icon" :halign "start")
+        (scale  :orientation "h" :class "sys_vol_slider"
+                :value volume_percent
+                :max 101
+                :min 0
+                :onchange "amixer sset Master {}%"))
+        
+        (box :orientation "h" :class "mic_box"
+        (label :text "" :class "mic_icon" :halign "start")
+        (scale  :orientation "h" :class "mic_slider"
+                :value mic_percent
+                :max 101
+                :min 0
+                :onchange "amixer sset Capture {}%" )))))
+;----Windows-------------------------
+(defwindow background 
+    :wm-ignore true 
+    :stacking "fg"
+    :windowtype "normal"
+    :geometry (geometry :x "66px" 
+                        :y "8px"
+                        :width "398px"
+                        :height "1064")
+"")
+
+(defwindow time_w
+	:wm-ignore true
+	:staking "fg"
+	:monitor 0
+    :windowtype "normal"
+	:geometry (geometry 
+				:x "70px"
+                :y "12px"
+				:width 285
+				:height 100 
+				:anchor "top left")
+(time))
+
+(defwindow spotify_l
+	:wm-ignore true
+	:staking "fg"
+	:monitor 0
+    :windowtype "normal"
+	:geometry (geometry 
+				:x "360px"
+                :y "12px"
+				:width 100
+				:height 100  
+				:anchor "top left")
+(spotify))
+
+(defwindow firefox_l
+	:wm-ignore true
+	:staking "fg"
+	:monitor 0
+    :windowtype "normal"
+	:geometry (geometry 
+				:x "360px"
+                :y "116px"
+				:width 100
+				:height 100  
+				:anchor "top left")
+(browser))
+
+(defwindow vim_l
+	:wm-ignore true
+	:staking "fg"
+	:monitor 0
+    :windowtype "normal"
+	:geometry (geometry 
+				:x "360px"
+                :y "220px"
+				:width 100
+				:height 100  
+				:anchor "top left")
+(vim))
+
+(defwindow notion_l
+	:wm-ignore true
+	:staking "fg"
+	:monitor 0
+    :windowtype "normal"
+	:geometry (geometry 
+				:x "360px"
+                :y "324px"
+				:width 100
+				:height 100  
+				:anchor "top left")
+(notion))
+
+(defwindow profile
+	:wm-ignore true
+	:staking "fg"
+	:monitor 0
+    :windowtype "normal"
+	:geometry (geometry 
+				:x "70px"
+                :y "116px"
+				:width 285
+				:height 310 
+				:anchor "top left")
+(profile))
+
+(defwindow spotify
+    :wm-ignore true 
+    :stacking "fg"
+    :monitor 0
+    :windowtype "normal"
+    :geometry (geometry
+                :x "70px"
+                :y "430px"
+                :width "390px"
+                :height "170px")
+(spotify_pl))
+
+(defwindow sys_stats
+    :wm-ignore true 
+    :stacking "fg"
+    :monitor 0
+    :windowtype "normal"
+    :geometry (geometry
+                :x "70px"
+                :y "604px"
+                :width 390
+                :height 340)
+(stats))
+
+(defwindow powermenu
+    :wm-ignore true
+    :stacking "fg"
+    :monitor 0
+    :windowtype "normal"
+    :geometry (geometry :x "70"
+                        :y "948"
+                        :width "390px"
+                        :height "120px")
+(power))
+

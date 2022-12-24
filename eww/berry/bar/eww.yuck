@@ -1,0 +1,34 @@
+(deflisten workspace "~/.config/eww/berry/scripts/workspace.sh") (defpoll time :interval "10s" "date +%a' '%H:%M")
+ 
+  (defwidget bar []
+    (centerbox :orientation "h"
+      (start)
+      (workspace)
+      (end)))
+  
+  (defwidget end []
+    (box :class "end" :space-evenly "false" :halign "end"
+    (label  :class "time" :text time :halign "end" :valign "center")
+    (button :class "btn" :onclick "powermenu" 
+        (image :path "/home/redlotus/.config/eww/berry/images/power.png" :image-width 25 :image-height 25))))
+  
+  (defwidget start []
+  (box :halign "start" :class "start" 
+    (button :class "btn" :onclick "~/.config/eww/berry/panel/launchpanel"  
+        (image :path "/home/redlotus/.config/eww/berry/images/archlinux.svg" :image-width 30 :image-height 30))))
+
+
+  (defwidget workspace []
+        (literal :content workspace))    
+    
+(defwindow bar
+    :monitor 0
+    :stacking "bg"
+    :windowtype "dock"
+    :geometry (geometry :x "0%"
+                        :y "8px"
+                        :width "1904"
+                        :height "50px"
+                        :anchor "top center")
+    :reserve (struts :side "top" :distance "4%")
+    (bar))

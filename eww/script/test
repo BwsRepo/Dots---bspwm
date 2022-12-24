@@ -1,0 +1,7 @@
+#!/bin/bash
+
+IMG_PATH=$HOME/.steam/steam/appcache/librarycache/
+IMG=_library_600x900.jpg
+ID=219150
+
+firefox $IMG_PATH$ID$IMG

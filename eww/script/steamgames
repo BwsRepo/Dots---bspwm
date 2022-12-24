@@ -1,0 +1,26 @@
+#! /bin/bash
+
+IDPATH=$HOME/.steam/steam/steamapps
+IMG_PATH=$HOME/.steam/steam/appcache/librarycache/
+IMG=_library_600x900.jpg
+SAVEFILE=/tmp/metadata/gameslist
+GAME_CMD="steam steam://rungameid/"
+
+
+print_games (){
+        while read -r ID
+    do
+	    VAR+="(eventbox :cursor \"pointer\" (box :class \"game_icon\" :style \"background-image: url('$IMG_PATH$ID$IMG');\" (button :onclick \"$GAME_CMD$ID\")))"
+    done <$SAVEFILE
+    echo "(box :orientation \"h\" $VAR)"
+}
+
+
+if test -f "$SAVEFILE"; then
+    rm $SAVEFILE
+    ls $IDPATH | grep appmanifest |sed 's/[^0-9]*//g' >> /tmp/metadata/gameslist
+    print_games
+
+fi
+
+

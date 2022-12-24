@@ -1,0 +1,98 @@
+
+;-------------------------variables---------------------------
+(defpoll user :interval "1h" "whoami")
+(defpoll uptime :interval "50s" "uptime -p | sed -e 's/up //;s/ hours,/h/;s/ hour,/h/;s/ minutes/m/;s/ minute/m/'")
+
+
+;-------------------------widget------------------------------
+
+(defwidget profile [] 
+    (box :orientation "v" :space-evenly "false" :class "profile"
+        (box :orientation "h" :class "pf_top"
+        (box    :orientation "h"
+        :halign "start" 
+        :class "whom"
+        (label :text "whoami"))) 
+        (box :orientation "h" :space-evenly "false"  :halign "center" :class "pfp")
+        (box :orientation "h" :space-evenly "false" :halign "center"
+            (label :class "pfp_txt" :text "${user}"))))
+
+
+
+
+(defwidget powermenu []
+     
+        (box    :orientation "v"
+                :space-evenly false
+                :class "window_inner"
+        (box    :orientation "h"
+                :space-evenly true
+                :class "top_outer"
+                (box    :orientation "h"
+                        :halign "start" 
+                        :class "uptime-t"
+                        (label :text "uptime: ${uptime}")))
+        (box    :orientation "h"
+                :class "msg"
+                (label  :text "Goodbye ?"))
+        (box    :orientation "h"
+                :class "btn_bx"
+                :halign "center"
+                :space-evenly false
+                :spacing "70" 
+                (button :class "powe_btn":onclick "poweroff" "襤" )
+                (button :class "rebo_btn":onclick "systemctl reboot" "" )
+                (button :class "susp_btn":onclick "systemctl suspend" "" )
+                (button :class "lock_btn":onclick "i3lock && eww -c $HOME/.config/eww/powermenu close profile powermen background" "" )
+                (button :class "exit_btn" :onclick "eww -c $HOME/.config/eww/powermenu close profile powermen background" "") 
+)))
+
+
+
+
+
+(defwidget bg []
+    (box    :orientation "h"
+            :class "bg"
+            :style "background-image: url('/tmp/i3lock.png')"))
+
+;------------------------------windows-----------------------------------
+
+(defwindow background
+    :wm-ignore false
+    :monitor 0 
+    :stacking "fg"
+    :anchor "center"
+    :windowtype "dock"
+    :geometry (geometry     :x "0px"
+                            :y "0px"
+                            :height "100%"
+                            :width "100%")                    
+    (bg))
+
+
+
+
+(defwindow profile
+	:wm-ignore true
+	:staking "fg"
+	:monitor 0
+    :windowtype "normal"
+	:geometry (geometry 
+				:x "505px"
+                :y "365px"
+				:width 285
+				:height 350 
+				:anchor "top left")
+(profile))
+
+(defwindow powermen
+    :wm-ignore true 
+    :monitor 0 
+    :stacking "fg"
+    :windowtype "normal"
+    :geometry (geometry     :x "800px"
+                            :y "400px"
+                            :height "350px"
+                            :width "600px")               
+    (powermenu))

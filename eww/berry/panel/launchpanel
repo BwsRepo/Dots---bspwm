@@ -1,0 +1,25 @@
+
+
+#!/bin/bash
+
+## Files and cmd
+FILE="$HOME/.cache/eww_launchbar"
+CFG="$HOME/.config/eww/berry/panel"
+EWW=`which eww`
+
+
+
+## Open widgets 
+run_eww() {
+	${EWW} --config "$CFG" open smolpanel
+}
+
+## Launch or close widgets accordingly
+if [[ ! -f "$FILE" ]]; then
+	touch "$FILE"
+	run_eww
+else
+	${EWW} --config "$CFG" close smolpanel 
+
+	rm "$FILE"
+fi

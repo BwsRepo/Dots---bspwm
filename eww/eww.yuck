@@ -1,0 +1,17 @@
+
+
+(defwidget color[]
+    (color-button :onchange "~/change '{}'"))
+
+(defwindow test
+	:wm-ignore true
+	:staking "fg"
+	:monitor 0
+    :windowtype "normal"
+	:geometry (geometry 
+				:x "70px"
+                :y "12px"
+				:width 285
+				:height 100 
+				:anchor "top left")
+(color))
