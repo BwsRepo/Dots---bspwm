@@ -63,7 +63,7 @@ listbox {
 inputbar {
     enabled:                     true;
     spacing:                     10px;
-    padding:                     100px 40px;
+    padding:                     80px 40px;
     background-color:            transparent;
     background-image:            url("~/.config/wall/red_black.jpg", width);
     text-color:                  @foreground;

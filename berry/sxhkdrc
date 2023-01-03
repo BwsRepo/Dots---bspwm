@@ -5,7 +5,8 @@
 alt + Tab
 	rofi -show window -window-thumbnail -theme $HOME/.config/rofi/altab2.rasi -font 'Comic Mono'
 
-
+alt + w 
+	sxiv -t ~/Pictures/Wallpaper
 
 # terminal emulator
 super + Return

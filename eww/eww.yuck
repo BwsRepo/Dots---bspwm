@@ -1,17 +1,58 @@
+;Thanks for the Workspace Widget @ https://github.com/Egsagon Egsagon
 
 
-(defwidget color[]
-    (color-button :onchange "~/change '{}'"))
+(defpoll songname :interval "2s" "playerctl metadata title")
+(defpoll outputs :interval "1s" :initial "[]" `echo $(python3 parser.py) | cut -d "!" -f2`)
 
-(defwindow test
-	:wm-ignore true
-	:staking "fg"
-	:monitor 0
-    :windowtype "normal"
-	:geometry (geometry 
-				:x "70px"
-                :y "12px"
-				:width 285
-				:height 100 
-				:anchor "top left")
-(color))
+
+
+(defwidget workspaces  []
+    (box
+      :orientation "vertical"
+      :valign "start"
+
+      (for output in outputs
+        (box
+          :orientation "h" :halign "start"
+          :class "workspace"
+            (box
+              :halign "center"
+              :class "output"
+              
+              (for wk in "${output['wks']}"
+                (label
+                  :text "${wk['name']}"
+                  :style "color: ${wk['focused'] ? '#bd93f9' : '#f8f8f2'}")))))))
+
+(defwidget start []
+    (box :class "workspaces " :halign "start" :spacing 5))
+(defwidget mid []
+    (box 
+    (label :text songname)))
+
+(defwidget end []
+    (box :halign "end"
+    (label :text "end")))
+
+
+
+(defwidget barw []
+    (centerbox :orientation "h"
+      (workspaces)
+      (mid)
+      (end)))
+
+
+(defwindow bar
+    :wm-ignore false
+    :monitor 0 
+    :stacking "fg"
+    :anchor "top"
+    :reserve (struts :distance "54px" :side "top")
+    :windowtype "dock"
+    :geometry (geometry     :x "8px"
+                            :y "8px"
+                            :height "30px"
+                            :width "100%")                    
+    (barw))
+

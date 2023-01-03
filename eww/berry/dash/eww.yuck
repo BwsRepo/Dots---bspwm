@@ -1,0 +1,117 @@
+(defpoll user :interval "1h" "whoami")
+(defpoll time :interval "1s" "date '+%H:%M'")
+(defpoll songname :interval "1s" "~/.config/eww/berry/scripts/spotify --song")
+(defpoll artist :interval "1s" "~/.config/eww/berry/scripts/spotify --artist")
+(defpoll icon :interval "1s" "~/.config/eww/berry/scripts/spotify --icon")
+(defpoll pos :interval "1s" "~/.config/eww/berry/scripts/spotify --pos")
+(defpoll len :interval "1s" "~/.config/eww/berry/scripts/spotify --len")
+(defpoll time_H :interval "1s" "date '+%H:%M'")
+
+(defwidget profile [] 
+    (box :orientation "v" :space-evenly "false" :class "profile"
+        (box :orientation "h" :class "pf_top") 
+        (box :orientation "h" :space-evenly "false"  :halign "center" :class "pfp")
+        (box :orientation "h" :space-evenly "false" :halign "center"
+            (label :class "pfp_txt" :text "${user}"))))
+
+(defwidget time []
+	(box :orientation "h" :class "time_w"
+		(label :text time)))
+
+(defwidget music [] 
+   (box :orientation "v" :class "music_outer"
+    (box    :orientation "v" :space-evenly false :class "music_labels" :halign "center"
+    (label :text "${songname}" :class "songname" :halign "start" :limit-width 20)
+    (box    :orientation "h" :class "music_slider"
+    (scale  
+        :min 0
+        :max len
+        :value pos
+        :orientation "h"
+        :onchange "playerctl --player=spotify position {}"))
+(box    :orientation "h"
+    :class "music_btn"
+    (button :onclick "playerctl previous" "玲")
+    (button :onclick "playerctl play-pause" "${icon}")
+    (button :onclick "playerctl next" "怜"  )))))
+
+(defwindow time
+	:wm-ignore true
+	:staking "bg"
+	:monitor 0
+    :windowtype "normal"
+	:geometry (geometry 
+				:x "480px"
+                :y "530px"
+				:width 250
+				:height 100
+				:anchor "top left")
+(time))
+
+
+(defwindow profile
+	:wm-ignore true
+	:staking "fg"
+	:monitor 0
+    :windowtype "normal"
+	:geometry (geometry 
+				:x "480px"
+                :y "270px"
+				:width 250
+				:height 250
+				:anchor "top left")
+(profile))
+
+
+(defwindow power
+	:wm-ignore true
+	:staking "fg"
+	:monitor 0
+    :windowtype "normal"
+	:geometry (geometry 
+				:x "740px"
+                :y "270px"
+				:width 80
+				:height 360 
+				:anchor "top left")
+"")
+
+(defwindow weather
+	:wm-ignore true
+	:staking "fg"
+	:monitor 0
+    :windowtype "normal"
+	:geometry (geometry 
+				:x "830px"
+                :y "270px"
+				:width 250
+				:height 100
+				:anchor "top left")
+"")
+
+
+	(defwindow bg
+		:wm-ignore true
+		:staking "fg"
+		:monitor 0
+		:windowtype "normal"
+		:geometry (geometry 
+					:x "480px"
+					:y "270px"
+					:width 960
+					:height 540
+					:anchor "top left")
+	"")
+
+(defwindow spotify
+	:wm-ignore true
+	:staking "fg"
+	:monitor 0
+    :windowtype "dock"
+	:geometry (geometry 
+				:x "480px"
+                :y "640px"
+				:width 340 
+				:height 170
+				:anchor "top left")
+(music))
